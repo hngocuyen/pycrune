@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+if [ "$#" -eq 0 ]; then
+  exec python3 "$@"
+fi
+case "$1" in
+  -3.*)
+    ver="${1#-}"
+    shift
+    exec "python${ver}" "$@"
+    ;;
+  *)
+    exec python3 "$@"
+    ;;
+esac
