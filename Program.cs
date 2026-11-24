@@ -76,6 +76,18 @@ public static class Program
         var decompiler = new StructuralDecompiler(codeObj);
         var stmts = decompiler.Decompile();
         var decompiledSource = PythonEmitter.Emit(stmts);
+        
+        var signature = """
+        # ================================================================
+        # PYCRUNE - Hngocuyen Python Bytecode Decompiler
+        # The project has lasted two years.
+        # From 6/2024 to 24/11/2026
+        # Author: Vuong Tien Dat (王达)
+        # ================================================================
+        
+        """;
+        
+        decompiledSource = signature + decompiledSource;
         sw.Stop();
 
         Console.ForegroundColor = ConsoleColor.Green;
