@@ -76,18 +76,6 @@ public static class Program
         var decompiler = new StructuralDecompiler(codeObj);
         var stmts = decompiler.Decompile();
         var decompiledSource = PythonEmitter.Emit(stmts);
-        
-        var signature = """
-        # ================================================================
-        # PYCRUNE - Hngocuyen Python Bytecode Decompiler
-        # The project has lasted two years.
-        # From 6/2024 to 24/11/2026
-        # Author: Vuong Tien Dat (王达)
-        # ================================================================
-        
-        """;
-        
-        decompiledSource = signature + decompiledSource;
         sw.Stop();
 
         Console.ForegroundColor = ConsoleColor.Green;
@@ -96,6 +84,19 @@ public static class Program
 
         if (!string.IsNullOrEmpty(outputPath))
         {
+            var fileName = Path.GetFileName(inputPath).ReplaceLineEndings(" ");
+            var timestamp = DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss zzz", System.Globalization.CultureInfo.InvariantCulture);
+            var header = string.Join(Environment.NewLine,
+                "# ================================================================",
+                "# PYCRUNE - Hngocuyen Python Bytecode Decompiler",
+                "# The project has lasted two years.",
+                "# From 6/2024 to 24/11/2026",
+                "# Author: Vuong Tien Dat (王达)",
+                $"# File : {fileName}",
+                $"# Version : Python {codeObj.PythonVersion} | {timestamp}",
+                "# ================================================================",
+                "", "");
+            decompiledSource = header + decompiledSource;
             File.WriteAllText(outputPath, decompiledSource);
             Console.WriteLine($"[+] Saved source to: {outputPath}");
         }
